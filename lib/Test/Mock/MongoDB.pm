@@ -117,17 +117,66 @@ Or you can leave default MongoDB behaviour by skipping init:
 
 =head1 DESCRIPTION
 
+Current module mocks MongoDB class. Can be run in two modes:
+
+=over 8
+
+=item overrides constructors (does not need real connection)
+
+=item do not override anything by default
+
+=back
+
+These modes controlled by: C<skip_init> parameter.
+
 =head1 METHODS
 
 =head2 init()
 
+This method invoked from constructor C<new()> in base class: L<Test::Mock::Signature>. Current method implement logic of C<skip_init> parameter passed into constructor C<new()>.
+
+C<skip_init> parameter can be:
+
+=over 8
+
+=item client - skip init of L<Test::Mock::MongoDB::MongoClient>
+
+=item database - skip init of L<Test::Mock::MongoDB::Database>
+
+=item collection - skip init of L<Test::Mock::MongoDB::Collection>
+
+=item cursor - skip init of L<Test::Mock::MongoDB::Cursor>
+
+=item all - skips all init
+
+=back
+
+e.g.:
+    $mock = Test::Mock::MongoDB->new( skip_init => 'client' );
+
+or
+
+    $mock = Test::Mock::MongoDB->new( skip_init => 'all' );
+
+or
+
+    $mock = Test::Mock::MongoDB->new( skip_init => [ qw| client database | ] );
+
 =head2 get_client() : L<Test::Mock::MongoDB::MongoClient>
+
+Returns object of class L<Test::Mock::MongoDB::MongoClient>.
 
 =head2 get_database() : L<Test::Mock::MongoDB::Database>
 
+Returns object of class L<Test::Mock::MongoDB::Database>.
+
 =head2 get_collection() : L<Test::Mock::MongoDB::Collection>
 
+Returns object of class L<Test::Mock::MongoDB::Collection>.
+
 =head2 get_cursor() : L<Test::Mock::MongoDB::Cursor>
+
+Returns object of class L<Test::Mock::MongoDB::Cursor>.
 
 =head1 AUTHOR
 
