@@ -152,6 +152,7 @@ C<skip_init> parameter can be:
 =back
 
 e.g.:
+
     $mock = Test::Mock::MongoDB->new( skip_init => 'client' );
 
 or
