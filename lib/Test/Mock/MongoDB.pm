@@ -76,3 +76,73 @@ sub get_cursor {
 }
 
 42;
+
+__END__
+
+=head1 NAME
+
+Test::Mock::MongoDB - mock module for MongoDB class.
+
+=head1 SYNOPSIS
+
+Mock all constructors by default:
+
+    use Test::Mock::MongoDB qw( any );
+
+    my $mock         = Test::Mock::MongoDB->new;
+    my $m_client     = $mock->get_client;
+    my $m_database   = $mock->get_database;
+    my $m_collection = $mock->get_collection;
+    my $m_cursor     = $mock->get_cursor;
+
+    my $db = $client->get_database('foo');
+    my $collection = $db->get_collection('bar');
+
+    $m_collection->method(insert => { name => any })->callback(
+        sub { 42 }
+    );
+    print $collection->insert({ name => 'cono'}); # 42
+
+Or you can leave default MongoDB behaviour by skipping init:
+
+    my $mock = Test::Mock::MongoDB->new(skip_init => 'all');
+
+    $mock->get_collection->method(find_one => { name => 'ivan'})->callback(
+        sub {
+            return { name => 'cono'};
+        }
+    );
+
+    my $doc = $collection->find_one({ name => 'ivan'}); # { name => 'cono' }
+
+=head1 DESCRIPTION
+
+=head1 METHODS
+
+=head2 init()
+
+=head2 get_client() : L<Test::Mock::MongoDB::MongoClient>
+
+=head2 get_database() : L<Test::Mock::MongoDB::Database>
+
+=head2 get_collection() : L<Test::Mock::MongoDB::Collection>
+
+=head2 get_cursor() : L<Test::Mock::MongoDB::Cursor>
+
+=head1 AUTHOR
+
+cono E<lt>cono@cpan.orgE<gt>
+
+=head1 COPYRIGHT
+
+Copyright 2014 - cono
+
+=head1 LICENSE
+
+Artistic v2.0
+
+=head1 SEE ALSO
+
+L<Test::Mock::Signature>, L<Data::Pattern::Compare>
+
+=cut
